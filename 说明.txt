@@ -1,0 +1,100 @@
+
+书：《java并发编程的艺术》：
+项目： tech03ThreadArtConcurrentBook
+
+第一：线程的几个涉及基础对象： t1type
+
+第二、线程的实现方式：  t2way
+线程的三种实现方式：
+Thread： t2way.thread
+Runnable：t2way.runnable
+Callable：t2way.callable
+Callable的详细解释： t2way.callable.detail
+参考1：关闭实现多线程的两种方式，区别和好处有哪些：
+http://blog.csdn.net/wd916913/article/details/6954317
+参考2：使用Java的Callable接口运行线程
+http://blog.csdn.net/ghsau/article/details/7451464
+http://tonl.iteye.com/blog/1874187
+http://wenku.baidu.com/link?url=dSpjAPWQfBLvODWbiE8H3XYy8cPUbKMKeUa3DVxTUqsvmHa0Kj9i3JGYG8Mrm1M0p1xuiyh9WvNMQcAq-vS_HV8s5oXPbfQL-6ct_0VntxC
+
+第三、线程池的内容：t3pool
+1.静态变量在多线程执行时会不会多次调用： t3pool.example
+
+2.实际项目中的一个应用： t3pool.example1
+
+3.基础应用以及池的添加线程方式（submit）： t3pool.example2
+参考：http://hbiao68.iteye.com/blog/1929245
+继承关系为： Executor - ExecutorService - ScheduledExecutorService - ScheduledThreadPoolExecutor
+
+4.思路比较清楚  t3pool.example3
+参考：http://blog.csdn.net/coding_or_coded/article/details/6856014
+Java5的线程池分好多种：具体的可以分为两类，固定尺寸的线程池、可变尺寸连接池。 
+　在使用线程池之前，必须知道如何去创建一个线程池，在Java5中，需要了解的是java.util.concurrent.Executors类的API，这个类提供大量创建连接池的静态方法，是必须掌握的。 
+一、固定大小的线程池，newFixedThreadPool：
+二、单任务线程池，newSingleThreadExecutor：
+仅仅是把上述代码中的ExecutorService pool = Executors.newFixedThreadPool(2)改为ExecutorService pool = Executors.newSingleThreadExecutor();
+三、可变尺寸的线程池，newCachedThreadPool：
+与上面的类似，只是改动下pool的创建方式：ExecutorService pool = Executors.newCachedThreadPool(); 
+四、延迟连接池，newScheduledThreadPool：
+五：单任务延迟连接池(和上面类似，就不写了)。
+当然我们也可以自定义线程池
+
+5. 自定义的线程池 t3pool.example4
+参考： http://825635381.iteye.com/blog/2184680
+参考1：http://825635381.iteye.com/blog/2184605
+参考2：http://blog.csdn.net/ghsau/article/details/17609747
+所有系统自带的 Executors 最终都是是实现的 ThreadPoolExecutor
+
+
+第四、线程锁的方面： 20160215暂时不清楚
+包：t4lock.l1ReentrantLock
+参考：http://hyxw5890.iteye.com/blog/1578597
+ReentrantLock的使用
+ReentrantLock相比synchronized多了以下一些特性： 
+1、synchronized关键字只能支持单条件（condition）、比如10个线程都在等待synchronized块锁定的资源、如果一直锁定、则其他线程都得不到释放从而引起死锁；而同样的情况使用ReentrantLock、则允许其他线程中断放弃尝试。reentrantlock本身支持多wait/notify队列、它可以指定notify某个线程。 
+2、ReentrantLock可以成为公平锁、所谓公平锁就是让等待最长的线程最早获得该锁（获得锁的顺序和申请锁的顺序是一致的）；与之对应的synchronized是非公平的、当然ReentrantLock也可以成为非公平锁；只是公平锁的性能相对差一些。 
+3、ReentrantLock又叫可重入锁、也就是说一个线程拥有锁了之后可以再次确认是否持有锁而不会出现死锁的问题。 
+4、ReentrantLock可以获取有多少线程正在等待该锁 
+以上几个特点使ReentrantLock相比synchronized的锁粒度更细、使用起来更灵活、可以满足更多的功能。 
+
+第五、 线程之： Thread Join()的用法 
+包： t5join
+参考： http://blog.csdn.net/hustpzb/article/details/8472929
+Java Thread类有个 join() 方法，先前一直不知道是怎么用的，直到看到这篇文章。http://auguslee.iteye.com/blog/1292203
+Java Thread中， join() 方法主要是让调用该方法的thread完成run方法里面的东西后， 再执行join()方法后面的代码。示例：
+t1启动后，调用join()方法，直到t1的计数任务结束，才轮到t2启动，然后t2也开始计数任务。可以看到，实例中，两个线程就按着严格的顺序来执行了。 
+如果t2的执行需要依赖于t1中的完整数据的时候，这种方法就可以很好的确保两个线程的同步性。
+
+第六、线程之：t6book.c4
+对书本《java 并发编程的艺术》的部分实现和演练
+c+num表示第几章
+如：c4表示第四章中的代码
+
+第七、 线程之： monitor
+包： t7monitor
+本质就是同步块如synchronized的实际内存编译中的监控器
+逻辑设计中为：
+开启： Monitor.Enter
+关闭： Monitor.Exit
+
+第八、 线程之： 取当前线程为何用 currentThread
+包： t8currentThread
+Thread.currentThread()
+参考：https://www.zhihu.com/question/20944522/answer/28119453
+
+第九、 线程之：ThreadLocal的原始和应用
+包： t9ThreadLocal
+参考：http://blog.csdn.net/lufeng20/article/details/24314381
+当使用ThreadLocal维护变量时，ThreadLocal为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。
+ThreadLocal是如何做到为每一个线程维护变量的副本的呢？其实实现的思路很简单：在ThreadLocal类中有一个Map，用于存储每一个线程的变量副本，Map中元素的键为线程对象，而值对应线程的变量副本。
+
+
+第十、 线程之：CountDownLatch的使用
+包： tt10CountDownLatch
+参考：http://www.iteye.com/topic/1002652
+同步辅助类
+
+
+
+
+
