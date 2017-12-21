@@ -26,14 +26,11 @@ public class ExecutorsDemo {
 
 	public static void main(String[] args) {
 		// 一共可分为 5 种
-		
 		// 不可延时线程池： 固定、单一、可变
 		// demoPools();
-		
-		// 可延时线程池： 固定、单一任务
+		// 可延时线程池： 固定、单一
 		demoPools2();
 	}
-
 	public static void demoPools() {
 		// 一、固定大小的线程池，newFixedThreadPool：
 		ExecutorService pool = Executors.newFixedThreadPool(5);
@@ -42,7 +39,6 @@ public class ExecutorsDemo {
 		// ExecutorService pool = Executors.newSingleThreadExecutor();
 		// 三、可变尺寸的线程池，newCachedThreadPool：
 //		ExecutorService pool = Executors.newCachedThreadPool();// 这种方式的特点是：可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们。
-
 		// 创建线程
 		Thread t1 = new MyThread();
 		Thread t2 = new MyThread();
@@ -58,7 +54,6 @@ public class ExecutorsDemo {
 		// 关闭线程池
 		pool.shutdown();
 	}
-
 	public static void demoPools2() {
 		// 创建一个线程池，它可安排在给定延迟后运行命令或者定期地执行。
 		// 四、可延迟的固定池 -可进入无限循环线程获取中
@@ -77,10 +72,8 @@ public class ExecutorsDemo {
 		// 使用延迟执行风格的方法
 		pool.schedule(t2, 10, TimeUnit.MILLISECONDS);
 		pool.schedule(t3, 10, TimeUnit.MILLISECONDS);
-
 		// 关闭线程池
 		// pool.shutdown();
-
 		// 使用延迟和频率执行的风格
 		pool.scheduleAtFixedRate(t4, 1, 5, TimeUnit.MILLISECONDS);
 		pool.scheduleWithFixedDelay(t5, 2, 10, TimeUnit.MILLISECONDS);

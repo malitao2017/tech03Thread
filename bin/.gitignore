@@ -1,11 +1,7 @@
-/t0temp/
-/t1type/
-/t2way/
 /t3pool/
 /t4lock/
 /t5join/
 /t6book/
-/t7monitor/
 /t8currentThread/
 /t9ThreadLocal/
 /tt10CountDownLatch/

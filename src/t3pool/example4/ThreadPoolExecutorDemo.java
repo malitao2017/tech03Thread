@@ -10,6 +10,7 @@ package t3pool.example4;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -30,18 +31,19 @@ public class ThreadPoolExecutorDemo {
 	/**
 	 * 线程池初始化方法
 	 * 
-	 * corePoolSize 核心线程池大小----10 maximumPoolSize 最大线程池大小----30 keepAliveTime
-	 * 线程池中超过corePoolSize数目的空闲线程最大存活时间----30+单位TimeUnit TimeUnit
-	 * keepAliveTime时间单位----TimeUnit.MINUTES workQueue 阻塞队列----new
-	 * ArrayBlockingQueue<Runnable>(10)====10容量的阻塞队列 threadFactory 新建线程工厂----new
-	 * CustomThreadFactory()====定制的线程工厂 rejectedExecutionHandler
-	 * 当提交任务数超过maxmumPoolSize+workQueue之和时,
-	 * 即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),
-	 * 任务会交给RejectedExecutionHandler来处理
+	 * corePoolSize 核心线程池大小----10 
+	 * maximumPoolSize 最大线程池大小----30 
+	 * keepAliveTime 线程池中超过corePoolSize数目的空闲线程最大存活时间----30+单位TimeUnit 
+	 * TimeUnit keepAliveTime时间单位----TimeUnit.MINUTES workQueue 
+	 * 阻塞队列----new ArrayBlockingQueue<Runnable>(10)====10容量的阻塞队列 
+	 * threadFactory 新建线程工厂----new CustomThreadFactory()====
+	 * 定制的线程工厂 rejectedExecutionHandler 当提交任务数超过maxmumPoolSize+workQueue之和时,即当提交第41个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),任务会交给RejectedExecutionHandler来处理
+	 * 
 	 */
 	public void init() {
-		pool = new ThreadPoolExecutor(10, 30, 30, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(10),
-				new CustomThreadFactory(), new CustomRejectedExecutionHandler());
+//		pool = new ThreadPoolExecutor(10, 30, 30, TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(10),new CustomThreadFactory(),new CustomRejectedExecutionHandler());
+		// 场景2：红外图谱使用的大量多数据的线程入库，要求：线程有序，解决：最大和核心线程数改为1，队列改为有序并且不限制数目 LinkedBlockingQueue
+		pool = new ThreadPoolExecutor(1, 1, 30, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),new CustomThreadFactory(),new CustomRejectedExecutionHandler());
 	}
 
 	public void destory() {
@@ -74,7 +76,7 @@ public class ThreadPoolExecutorDemo {
 		public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
 			// 记录异常
 			// 报警处理等
-			System.out.println("error.............");
+			System.out.println("error............."+Thread.currentThread().getName());
 		}
 	}
 
@@ -91,7 +93,7 @@ public class ThreadPoolExecutorDemo {
 		exec.init();
 
 		ExecutorService pool = exec.getCustomThreadPoolExecutor();
-		for (int i = 1; i < 100; i++) {
+		for (int i = 1; i <= 100; i++) {
 			System.out.println("提交第" + i + "个任务!");
 			pool.execute(new Runnable() {
 				@Override
@@ -101,7 +103,7 @@ public class ThreadPoolExecutorDemo {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					System.out.println("running=====");
+					System.out.println("running====="+Thread.currentThread().getName());
 				}
 			});
 		}
